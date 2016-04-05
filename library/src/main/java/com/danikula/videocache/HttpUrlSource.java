@@ -2,6 +2,9 @@ package com.danikula.videocache;
 
 import android.text.TextUtils;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.OkUrlFactory;
+
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -129,7 +132,7 @@ public class HttpUrlSource implements Source {
         String url = this.url;
         do {
             mLogger.d("Open connection " + (offset > 0 ? " with offset " + offset : "") + " to " + url);
-            connection = (HttpURLConnection) new URL(url).openConnection();
+            connection = new OkUrlFactory(new OkHttpClient()).open(new URL(url));
             if (offset > 0) {
                 connection.setRequestProperty("Range", "bytes=" + offset + "-");
             }
